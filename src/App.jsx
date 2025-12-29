@@ -1,14 +1,9 @@
-import BaseCard from "./components/Card/BaseCard";
+import Board from "./components/Board";
 
 function App() {
   return (
-    <div className="p-10">
-      <BaseCard
-        title="Test kaart"
-        onDelete={() => alert("Kaart verwijderd")}
-      >
-        <p>Dit is testinhoud</p>
-      </BaseCard>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <Board />
     </div>
   );
 }
