@@ -2,6 +2,8 @@ import { useState } from "react";
 import BaseCard from "./Card/BaseCard";
 import CardPicker from "./CardPicker";
 
+import NoteCard from "./Card/NoteCard";
+
 export default function Board() {
     const [cards, setCards] = useState([]);
 
@@ -25,12 +27,10 @@ export default function Board() {
         switch (card.type) {
             case "note":
                 return (
-                    <BaseCard
-                        title="Notitie"
-                        onDelete={() => removeCard(card.id)}
-                    >
-                        <p>Notitie-inhoud (komt later)</p>
-                    </BaseCard>
+                    <NoteCard
+                    key={card.id}
+                    onDelete={() => removeCard(card.id)}
+                    />
                 );
 
             case "todo":
