@@ -3,6 +3,7 @@ import BaseCard from "./Card/BaseCard";
 import CardPicker from "./CardPicker";
 
 import NoteCard from "./Card/NoteCard";
+import ToDoCard from "./Card/TodoCard";
 
 export default function Board() {
     const [cards, setCards] = useState([]);
@@ -28,19 +29,16 @@ export default function Board() {
             case "note":
                 return (
                     <NoteCard
-                    key={card.id}
-                    onDelete={() => removeCard(card.id)}
+                        key={card.id}
+                        onDelete={() => removeCard(card.id)}
                     />
                 );
 
             case "todo":
                 return (
-                    <BaseCard
-                        title="To-do"
+                    <ToDoCard
                         onDelete={() => removeCard(card.id)}
-                    >
-                        <p>To-do-inhoud (komt later)</p>
-                    </BaseCard>
+                    />
                 );
 
             case "quote":
