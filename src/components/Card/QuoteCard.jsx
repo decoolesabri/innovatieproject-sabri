@@ -15,7 +15,7 @@ export default function QuoteCard({ onDelete }) {
 
     return (
         <BaseCard title="Quote" onDelete={onDelete}>
-            {quote && (
+            {quote && ( // Als quote true is = rendeer, anders null
                 <div className="space-y-2">
                     <p className="italic">“{quote.text}”</p>
                     <p className="text-sm text-gray-500">— {quote.author}</p>
@@ -31,5 +31,3 @@ export default function QuoteCard({ onDelete }) {
         </BaseCard>
     )
 }
-
-// Code die ik niet begrijp nog onderzoeken
