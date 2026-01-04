@@ -5,6 +5,7 @@ import CardPicker from "./CardPicker";
 import NoteCard from "./Card/NoteCard";
 import ToDoCard from "./Card/TodoCard";
 import QuoteCard from "./Card/QuoteCard";
+import GalleryCard from "./Card/GalleryCard";
 
 export default function Board() {
     const [cards, setCards] = useState([]);
@@ -48,6 +49,14 @@ export default function Board() {
                         onDelete={() => removeCard(card.id)}
                     />
                 );
+
+            case "gallery":
+                return (
+                    <GalleryCard
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
 
             default:
                 return null;

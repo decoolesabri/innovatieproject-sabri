@@ -29,5 +29,5 @@ export default function QuoteCard({ onDelete }) {
                 </div>
             )}
         </BaseCard>
-    )
+    );
 }
