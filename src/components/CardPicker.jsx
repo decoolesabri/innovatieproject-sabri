@@ -21,6 +21,13 @@ export default function CardPicker({ addCard }) {
             >
                 Quote
             </button>
+
+            <button
+                onClick={() => addCard("gallery")}
+                className="px-4 py-2 bg-pink-500 text-white rounded"
+            >
+                Gallery
+            </button>
         </div>
     );
 }
