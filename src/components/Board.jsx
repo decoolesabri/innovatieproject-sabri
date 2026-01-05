@@ -1,11 +1,11 @@
 import { useState } from "react";
-import BaseCard from "./Card/BaseCard";
 import CardPicker from "./CardPicker";
 
 import NoteCard from "./Card/NoteCard";
 import ToDoCard from "./Card/TodoCard";
 import QuoteCard from "./Card/QuoteCard";
 import GalleryCard from "./Card/GalleryCard";
+import TimerCard from "./Card/TimerCard"
 
 export default function Board() {
     const [cards, setCards] = useState([]);
@@ -31,7 +31,6 @@ export default function Board() {
             case "note":
                 return (
                     <NoteCard
-                        key={card.id}
                         onDelete={() => removeCard(card.id)}
                     />
                 );
@@ -57,6 +56,12 @@ export default function Board() {
                     />
                 );
 
+            case "timer":
+                return (
+                    <TimerCard
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
 
             default:
                 return null;
