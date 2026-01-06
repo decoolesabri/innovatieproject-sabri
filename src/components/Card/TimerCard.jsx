@@ -7,6 +7,7 @@ export default function TimerCard({ onDelete }) {
 
     const [seconds, setSeconds] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
+    const [isFinished, setIsFinished] = useState(false);
 
     function increaseMinutes() {
         if (!isRunning) {
@@ -21,10 +22,19 @@ export default function TimerCard({ onDelete }) {
     }
 
     function toggleTimer() {
+        if (!isRunning) {
+            setIsFinished(false);
+
+            if (seconds === 0) {
+                setSeconds(59);
+                setMinutes((prev) => prev - 1);
+            }
+        }
+
         setIsRunning((prev) => !prev);
     }
 
-    useEffect(() => {
+    useEffect(() => { // Reageert op state veranderingen
         if (!isRunning) return;
 
         const interval = setInterval(() => {
@@ -39,16 +49,21 @@ export default function TimerCard({ onDelete }) {
                 }
 
                 setIsRunning(false);
+                setIsFinished(true);
                 return 0;
             });
         }, 1000);
 
-        return () => clearInterval(interval); // ?
-    }, [isRunning, minutes]); // ?
+        return () => clearInterval(interval); // Opruimen
+    }, [isRunning, minutes]); // Wanneer effect opnieuw mag draaien
 
     return (
         <BaseCard title="Timer" onDelete={onDelete}>
-            <div className="space-y-4">
+            <div
+                className={`space-y-4 transition-all ${
+                    isFinished ? "ring-4 ring-red-700 animate-pulse rounded-xl" : ""
+                }`}
+            >
                 <input
                     type="text" // De soort input
                     value={title} // ?
@@ -57,7 +72,10 @@ export default function TimerCard({ onDelete }) {
                     className="w-full p-2 border rounded text-sm"
                 />
 
-                <div className="text-center text-3xl font-mono">
+                <div className={`text-center text-3xl font-mono ${
+                        isFinished ? "text-red-700 font-bold" : ""
+                    }`}
+                >
                     {String(minutes).padStart(2, "0")}:
                     {String(seconds).padStart(2, "0")} {/* ? */}
                 </div>
