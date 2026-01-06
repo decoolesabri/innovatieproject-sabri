@@ -66,7 +66,7 @@ export default function TimerCard({ onDelete }) {
             >
                 <input
                     type="text" // De soort input
-                    value={title} // ?
+                    value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Waar is deze timer voor?"
                     className="w-full p-2 border rounded text-sm"
@@ -77,13 +77,13 @@ export default function TimerCard({ onDelete }) {
                     }`}
                 >
                     {String(minutes).padStart(2, "0")}:
-                    {String(seconds).padStart(2, "0")} {/* ? */}
+                    {String(seconds).padStart(2, "0")}
                 </div>
 
                 <div className="flex justify-center gap-4">
                     <button
                         onClick={increaseMinutes}
-                        disabled={isRunning} // ?
+                        disabled={isRunning}
                         className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
                     >
                         ▲
@@ -91,7 +91,7 @@ export default function TimerCard({ onDelete }) {
 
                     <button
                         onClick={decreaseMinutes}
-                        disabled={isRunning} // ?
+                        disabled={isRunning}
                         className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
                     >
                         ▼
