@@ -6,6 +6,7 @@ import ToDoCard from "./Card/TodoCard";
 import QuoteCard from "./Card/QuoteCard";
 import GalleryCard from "./Card/GalleryCard";
 import TimerCard from "./Card/TimerCard"
+import CalculatorCard from "./Card/CalculatorCard";
 
 export default function Board() {
     const [cards, setCards] = useState([]);
@@ -59,6 +60,13 @@ export default function Board() {
             case "timer":
                 return (
                     <TimerCard
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            case "calculator":
+                return (
+                    <CalculatorCard
                         onDelete={() => removeCard(card.id)}
                     />
                 );
