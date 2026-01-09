@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "city": "Amsterdam",
+    "temperature": 18,
+    "condition": "Bewolkt",
+    "humidity": 72,
+    "wind": 4.5,
+    "icon": "cloud"
+  },
+  {
+    "id": 2,
+    "city": "Rotterdam",
+    "temperature": 21,
+    "condition": "Zonnig",
+    "humidity": 55,
+    "wind": 3.2,
+    "icon": "sun"
+  },
+  {
+    "id": 3,
+    "city": "Utrecht",
+    "temperature": 16,
+    "condition": "Regen",
+    "humidity": 80,
+    "wind": 5.1,
+    "icon": "rain"
+  }
+]

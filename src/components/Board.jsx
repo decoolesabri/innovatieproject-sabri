@@ -7,6 +7,7 @@ import QuoteCard from "./Card/QuoteCard";
 import GalleryCard from "./Card/GalleryCard";
 import TimerCard from "./Card/TimerCard"
 import CalculatorCard from "./Card/CalculatorCard";
+import WeatherCard from "./Card/WeatherCard";
 
 export default function Board() {
     const [cards, setCards] = useState([]);
@@ -67,6 +68,13 @@ export default function Board() {
             case "calculator":
                 return (
                     <CalculatorCard
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            case "weather":
+                return (
+                    <WeatherCard
                         onDelete={() => removeCard(card.id)}
                     />
                 );
