@@ -42,6 +42,13 @@ export default function CardPicker({ addCard }) {
             >
                 Calculator
             </button>
+
+            <button
+                onClick={() => addCard("weather")}
+                className="px-4 py-2 bg-red-500 text-white rounded"
+            >
+                Weer
+            </button>
         </div>
     );
 }

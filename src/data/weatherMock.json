@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "city": "Amsterdam",
+    "temperature": 18,
+    "condition": "Bewolkt",
+    "humidity": 72,
+    "wind": 4.5,
+    "icon": "cloud"
+  },
+  {
+    "id": 2,
+    "city": "Rotterdam",
+    "temperature": 21,
+    "condition": "Zonnig",
+    "humidity": 55,
+    "wind": 3.2,
+    "icon": "sun"
+  },
+  {
+    "id": 3,
+    "city": "Utrecht",
+    "temperature": 16,
+    "condition": "Regen",
+    "humidity": 80,
+    "wind": 5.1,
+    "icon": "rain"
+  },
+  {
+    "id": 4,
+    "city": "Den Haag",
+    "temperature": 19,
+    "condition": "Halfbewolkt",
+    "humidity": 65,
+    "wind": 4.0,
+    "icon": "cloud-sun"
+  },
+  {
+    "id": 5,
+    "city": "Eindhoven",
+    "temperature": 22,
+    "condition": "Zonnig",
+    "humidity": 50,
+    "wind": 2.8,
+    "icon": "sun"
+  },
+  {
+    "id": 6,
+    "city": "Groningen",
+    "temperature": 15,
+    "condition": "Mist",
+    "humidity": 85,
+    "wind": 3.6,
+    "icon": "fog"
+  },
+  {
+    "id": 7,
+    "city": "Maastricht",
+    "temperature": 20,
+    "condition": "Halfbewolkt",
+    "humidity": 60,
+    "wind": 3.0,
+    "icon": "cloud-sun"
+  },
+  {
+    "id": 8,
+    "city": "Leiden",
+    "temperature": 17,
+    "condition": "Bewolkt",
+    "humidity": 70,
+    "wind": 4.2,
+    "icon": "cloud"
+  },
+  {
+    "id": 9,
+    "city": "Haarlem",
+    "temperature": 18,
+    "condition": "Regen",
+    "humidity": 78,
+    "wind": 4.9,
+    "icon": "rain"
+  },
+  {
+    "id": 10,
+    "city": "Amersfoort",
+    "temperature": 19,
+    "condition": "Zonnig",
+    "humidity": 58,
+    "wind": 3.4,
+    "icon": "sun"
+  },
+  {
+    "id": 11,
+    "city": "Zwolle",
+    "temperature": 16,
+    "condition": "Mist",
+    "humidity": 82,
+    "wind": 3.9,
+    "icon": "fog"
+  },
+  {
+    "id": 12,
+    "city": "Arnhem",
+    "temperature": 17,
+    "condition": "Halfbewolkt",
+    "humidity": 63,
+    "wind": 3.7,
+    "icon": "cloud-sun"
+  },
+  {
+    "id": 13,
+    "city": "Nijmegen",
+    "temperature": 18,
+    "condition": "Onweer",
+    "humidity": 75,
+    "wind": 6.0,
+    "icon": "storm"
+  },
+  {
+    "id": 14,
+    "city": "Breda",
+    "temperature": 21,
+    "condition": "Zonnig",
+    "humidity": 52,
+    "wind": 2.9,
+    "icon": "sun"
+  },
+  {
+    "id": 15,
+    "city": "Tilburg",
+    "temperature": 20,
+    "condition": "Bewolkt",
+    "humidity": 68,
+    "wind": 3.8,
+    "icon": "cloud"
+  },
+  {
+    "id": 16,
+    "city": "Enschede",
+    "temperature": 15,
+    "condition": "Regen",
+    "humidity": 79,
+    "wind": 5.3,
+    "icon": "rain"
+  },
+  {
+    "id": 17,
+    "city": "Deventer",
+    "temperature": 16,
+    "condition": "Halfbewolkt",
+    "humidity": 64,
+    "wind": 3.5,
+    "icon": "cloud-sun"
+  },
+  {
+    "id": 18,
+    "city": "Almere",
+    "temperature": 18,
+    "condition": "Bewolkt",
+    "humidity": 71,
+    "wind": 4.1,
+    "icon": "cloud"
+  },
+  {
+    "id": 19,
+    "city": "Apeldoorn",
+    "temperature": 14,
+    "condition": "Sneeuw",
+    "humidity": 90,
+    "wind": 4.8,
+    "icon": "snow"
+  },
+  {
+    "id": 20,
+    "city": "Leeuwarden",
+    "temperature": 13,
+    "condition": "Sneeuw",
+    "humidity": 88,
+    "wind": 5.6,
+    "icon": "snow"
+  }
+]
