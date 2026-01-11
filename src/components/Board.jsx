@@ -88,7 +88,9 @@ export default function Board() {
         <>
             <CardPicker addCard={addCard}/>
 
-            <div className="flex flex-wrap gap-4">
+            <div
+                className="relative w-full min-h-[80vh] bg-red-100 rounded-xl p-4 overflow-hidden"
+            >
                 {cards.map((card) => (
                     <div key={card.id}>
                     {renderCard(card)}
