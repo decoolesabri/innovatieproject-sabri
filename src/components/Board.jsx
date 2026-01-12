@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CardPicker from "./CardPicker";
 
 import NoteCard from "./Card/NoteCard";
@@ -10,9 +10,18 @@ import CalculatorCard from "./Card/CalculatorCard";
 import WeatherCard from "./Card/WeatherCard";
 
 export default function Board() {
-    const [cards, setCards] = useState([]);
+    const [cards, setCards] = useState(() => {
+        const saved = localStorage.getItem("board-cards");
+        return saved ? JSON.parse(saved) : [];
+    });
+
     const [draggingId, setDraggingId] = useState(null);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        localStorage.setItem("board-cards", JSON.stringify(cards));
+    }, [cards]);
+
 
     function addCard(type) {
         setCards((prevCards) => [
@@ -89,9 +98,24 @@ export default function Board() {
         }
     }
 
+    function resetBoard() {
+        setCards([]);
+        localStorage.removeItem("board-cards");
+    }
+
     return (
         <>
             <CardPicker addCard={addCard}/>
+
+            <div className="flex justify-end mb-2">
+                <button
+                    onClick={resetBoard}
+                    className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                    Reset bord
+                </button>
+            </div>
+
 
             <div
                 className="relative w-full min-h-[80vh] bg-red-100 rounded-xl p-4 overflow-hidden"
