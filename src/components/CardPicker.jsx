@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CardPicker({ addCard }) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(() => {
+        const saved = localStorage.getItem("cardpicker-open");
+        return saved === "true";
+    });
 
     function add(type) {
         addCard(type);
     }
+
+    useEffect(() => { // Elke keer als open verandert wordt de nieuwe waarde opgeslagen
+        localStorage.setItem("cardpicker-open", open);
+    }, [open]);
+
 
     return (
         <div className="flex items-center gap-2 min-h-18">

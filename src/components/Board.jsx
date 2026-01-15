@@ -47,6 +47,7 @@ export default function Board() {
             case "note":
                 return (
                     <NoteCard
+                        id={card.id}
                         onDelete={() => removeCard(card.id)}
                     />
                 );
@@ -54,6 +55,7 @@ export default function Board() {
             case "todo":
                 return (
                     <ToDoCard
+                        id={card.id}
                         onDelete={() => removeCard(card.id)}
                     />
                 );
@@ -61,6 +63,7 @@ export default function Board() {
             case "quote":
                 return (
                     <QuoteCard
+                        id={card.id}
                         onDelete={() => removeCard(card.id)}
                     />
                 );
@@ -68,6 +71,7 @@ export default function Board() {
             case "gallery":
                 return (
                     <GalleryCard
+                        id={card.id}
                         onDelete={() => removeCard(card.id)}
                     />
                 );
@@ -75,6 +79,7 @@ export default function Board() {
             case "timer":
                 return (
                     <TimerCard
+                        id={card.id}
                         onDelete={() => removeCard(card.id)}
                     />
                 );
@@ -82,6 +87,7 @@ export default function Board() {
             case "calculator":
                 return (
                     <CalculatorCard
+                        id={card.id}
                         onDelete={() => removeCard(card.id)}
                     />
                 );
@@ -89,6 +95,7 @@ export default function Board() {
             case "weather":
                 return (
                     <WeatherCard
+                        id={card.id}
                         onDelete={() => removeCard(card.id)}
                     />
                 );
