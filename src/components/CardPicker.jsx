@@ -14,7 +14,6 @@ export default function CardPicker({ addCard }) {
         localStorage.setItem("cardpicker-open", open);
     }, [open]);
 
-
     return (
         <div className="flex items-center gap-2 min-h-18">
             {/* Open button */}

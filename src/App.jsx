@@ -9,3 +9,15 @@ function App() {
 }
 
 export default App;
+
+// Borden verwijderen
+// Borden een naam geven (en aanpassen)
+// Bij refresh bij hetzelfde bord blijven
+// Bord achtergrond aanpassen
+
+// GalleryCard mooier maken
+// TodoCard belang geven + voortgangsbalk
+
+// Kaarten kunnen pinnen/locken
+
+// Darkmode maken
