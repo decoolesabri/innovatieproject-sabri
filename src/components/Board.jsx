@@ -10,36 +10,52 @@ import CalculatorCard from "./Card/CalculatorCard";
 import WeatherCard from "./Card/WeatherCard";
 
 export default function Board() {
+    const DEFAULT_BOARD_ID = "default";
+    const DEFAULT_BOARD = {
+        id: DEFAULT_BOARD_ID,
+        name: "Mijn bord",
+        cards: [],
+    };
+
     const [boards, setBoards] = useState(() => {
         const saved = localStorage.getItem("boards");
-        return saved
-            ? JSON.parse(saved)
-            : {
-                default: {
-                    id: "default",
-                    name: "Mijn bord",
-                    cards: [],
-                },
-            };
+
+        if (saved) {
+            const parsed = JSON.parse(saved);
+
+            // forceer dat Mijn bord altijd bestaat
+            if (!parsed[DEFAULT_BOARD_ID]) {
+                return {
+                    [DEFAULT_BOARD_ID]: DEFAULT_BOARD,
+                    ...parsed,
+                };
+            }
+
+            return parsed;
+        }
+
+        return {
+            [DEFAULT_BOARD_ID]: DEFAULT_BOARD,
+        };
     });
-
-    const [activeBoardId, setActiveBoardId] = useState("default");
-
-
-
-
-    const activeBoard = boards[activeBoardId];
-    const cards = activeBoard.cards;
-
-
 
     const [draggingId, setDraggingId] = useState(null);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+    const [activeBoardId, setActiveBoardId] = useState(DEFAULT_BOARD_ID);
+
+    const activeBoard = boards[activeBoardId];
 
     useEffect(() => {
         localStorage.setItem("boards", JSON.stringify(boards));
     }, [boards]);
 
+    // Als het actieve bord even niet bestaat, stop render
+    if (!activeBoard) {
+        return <div className="p-4">Bord laden...</div>;
+    }
+
+    const cards = activeBoard.cards;
 
     function updateCards(updater) {
         setBoards((prev) => ({
@@ -50,7 +66,6 @@ export default function Board() {
             },
         }));
     }
-
 
     function addCard(type) {
         updateCards((prevCards) => [
@@ -65,13 +80,11 @@ export default function Board() {
         ]);
     }
 
-
     function removeCard(id) {
         updateCards((prevCards) =>
             prevCards.filter((card) => card.id !== id)
         );
     }
-
 
     function renderCard(card) {
         switch (card.type) {
@@ -140,22 +153,54 @@ export default function Board() {
         updateCards(() => []);
     }
 
+    function deleteBoard(boardId) {
+        setBoards((prevBoards) => {
+            const entries = Object.entries(prevBoards);
+
+            // Minstens 1 bord houden
+            if (entries.length <= 1) {
+                return prevBoards;
+            }
+
+            const newBoards = { ...prevBoards };
+            delete newBoards[boardId];
+
+            // Als je het actieve bord verwijdert, witch naar een andere
+            if (boardId === activeBoardId) {
+                const remainingIds = Object.keys(newBoards);
+                setActiveBoardId(remainingIds[0]);
+            }
+
+            return newBoards;
+        });
+    }
 
     return (
         <>
-            <div className="flex gap-2 mb-3">
+            <div className="flex gap-2 mb-3 items-center flex-wrap">
                 {Object.values(boards).map((board) => (
-                    <button
-                        key={board.id}
-                        onClick={() => setActiveBoardId(board.id)}
-                        className={`px-3 py-1 rounded ${
-                            board.id === activeBoardId
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-200"
-                        }`}
-                    >
-                        {board.name}
-                    </button>
+                    <div key={board.id} className="flex items-center gap-1">
+                        <button
+                            onClick={() => setActiveBoardId(board.id)}
+                            className={`px-3 py-1 rounded ${
+                                board.id === activeBoardId
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-gray-200"
+                            }`}
+                        >
+                            {board.name}
+                        </button>
+
+                        {board.id !== DEFAULT_BOARD_ID && (
+                            <button
+                                onClick={() => deleteBoard(board.id)}
+                                className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
+                                title="Verwijder bord"
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </div>
                 ))}
 
                 <button
@@ -176,6 +221,7 @@ export default function Board() {
                     + Bord
                 </button>
             </div>
+
 
             <CardPicker addCard={addCard}/>
 
