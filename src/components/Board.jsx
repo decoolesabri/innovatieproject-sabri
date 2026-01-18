@@ -42,13 +42,22 @@ export default function Board() {
     const [draggingId, setDraggingId] = useState(null);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-    const [activeBoardId, setActiveBoardId] = useState(DEFAULT_BOARD_ID);
+    const [activeBoardId, setActiveBoardId] = useState(() => {
+        return localStorage.getItem("activeBoardId") || DEFAULT_BOARD_ID;
+    });
 
     const activeBoard = boards[activeBoardId];
+
+    const [editingBoardId, setEditingBoardId] = useState(null);
+    const [editingName, setEditingName] = useState("");
 
     useEffect(() => {
         localStorage.setItem("boards", JSON.stringify(boards));
     }, [boards]);
+
+    useEffect(() => {
+        localStorage.setItem("activeBoardId", activeBoardId);
+    }, [activeBoardId]);
 
     // Als het actieve bord even niet bestaat, stop render
     if (!activeBoard) {
@@ -175,21 +184,59 @@ export default function Board() {
         });
     }
 
+    function saveBoardName(boardId) {
+        setBoards((prev) => ({
+            ...prev,
+            [boardId]: {
+                ...prev[boardId],
+                name: editingName.trim() || prev[boardId].name,
+            },
+        }));
+
+        setEditingBoardId(null);
+        setEditingName("");
+    }
+
     return (
         <>
             <div className="flex gap-2 mb-3 items-center flex-wrap">
                 {Object.values(boards).map((board) => (
                     <div key={board.id} className="flex items-center gap-1">
-                        <button
-                            onClick={() => setActiveBoardId(board.id)}
-                            className={`px-3 py-1 rounded ${
-                                board.id === activeBoardId
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-gray-200"
-                            }`}
-                        >
-                            {board.name}
-                        </button>
+                        {editingBoardId === board.id ? (
+                            <input
+                                autoFocus
+                                value={editingName}
+                                onChange={(e) => setEditingName(e.target.value)}
+                                onBlur={() => saveBoardName(board.id)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") saveBoardName(board.id);
+                                    if (e.key === "Escape") setEditingBoardId(null);
+                                }}
+                                className="px-2 py-1 border rounded text-sm w-32"
+                            />
+                        ) : (
+                            <button
+                                onClick={() => setActiveBoardId(board.id)}
+                                onDoubleClick={() => {
+                                    if (board.id === DEFAULT_BOARD_ID) return;
+
+                                    setEditingBoardId(board.id);
+                                    setEditingName(board.name);
+                                }}
+                                className={`px-3 py-1 rounded ${
+                                    board.id === activeBoardId
+                                        ? "bg-blue-500 text-white"
+                                        : "bg-gray-200"
+                                }`}
+                                title={
+                                    board.id === DEFAULT_BOARD_ID
+                                        ? "Dit bord kan niet hernoemd worden"
+                                        : "Dubbelklik om naam te wijzigen"
+                                }
+                            >
+                                {board.name}
+                            </button>
+                        )}
 
                         {board.id !== DEFAULT_BOARD_ID && (
                             <button
@@ -236,7 +283,11 @@ export default function Board() {
 
 
             <div
-                className="relative w-full h-[80vh] bg-red-100 rounded-xl p-4 overflow-auto"
+                className="relative w-full h-[80vh] rounded-xl p-4 overflow-auto
+                        bg-cover bg-center bg-no-repeat"
+                style={{
+                    backgroundImage: "url('/bulletin.jpg')",
+                }}
                 onMouseMove={(e) => {
                     if (draggingId === null) return;
 

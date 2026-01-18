@@ -10,10 +10,9 @@ function App() {
 
 export default App;
 
-// Borden verwijderen
-// Borden een naam geven (en aanpassen)
-// Bij refresh bij hetzelfde bord blijven
-// Bord achtergrond aanpassen
+// Bord achtergrond aanpassen (kiezen uit fotos?)
+// Bord achtegrond verschillende fotos kiezen
+// Bord achtergrond eigen foto kiezen
 
 // GalleryCard mooier maken
 // TodoCard belang geven + voortgangsbalk
