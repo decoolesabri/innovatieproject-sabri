@@ -15,6 +15,10 @@ export default function Board() {
         id: DEFAULT_BOARD_ID,
         name: "Mijn bord",
         cards: [],
+        background: {
+            type: "color",
+            value: "#E6ECE8",
+        },
     };
 
     const [boards, setBoards] = useState(() => {
@@ -31,7 +35,20 @@ export default function Board() {
                 };
             }
 
-            return parsed;
+            const fixedBoards = {};
+
+            for (const [id, board] of Object.entries(parsed)) {
+                fixedBoards[id] = {
+                    ...board,
+                    background: board.background ?? {
+                        type: "color",
+                        value: "#E6ECE8",
+                    },
+                };
+            }
+
+            return fixedBoards;
+
         }
 
         return {
@@ -197,6 +214,17 @@ export default function Board() {
         setEditingName("");
     }
 
+    function setBoardBackground(background) {
+        setBoards((prev) => ({
+            ...prev,
+            [activeBoardId]: {
+                ...prev[activeBoardId],
+                background,
+            },
+        }));
+    }
+
+
     return (
         <>
             <div className="flex gap-2 mb-3 items-center flex-wrap">
@@ -259,6 +287,10 @@ export default function Board() {
                                 id,
                                 name: `Bord ${Object.keys(prev).length + 1}`,
                                 cards: [],
+                                background: {
+                                    type: "color",
+                                    value: "#E6ECE8",
+                                },
                             },
                         }));
                         setActiveBoardId(id);
@@ -272,7 +304,31 @@ export default function Board() {
 
             <CardPicker addCard={addCard}/>
 
-            <div className="flex justify-end mb-2">
+            <div className="flex justify-end gap-2 mb-2">
+                <button
+                    onClick={() =>
+                        setBoardBackground({
+                            type: "color",
+                            value: "#E6ECE8",
+                        })
+                    }
+                    className="px-3 py-1 text-sm bg-gray-200 rounded"
+                >
+                    Kleur
+                </button>
+
+                <button
+                    onClick={() =>
+                        setBoardBackground({
+                            type: "image",
+                            value: "/bulletin.jpg",
+                        })
+                    }
+                    className="px-3 py-1 text-sm bg-gray-200 rounded"
+                >
+                    Afbeelding
+                </button>
+
                 <button
                     onClick={resetBoard}
                     className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
@@ -282,12 +338,15 @@ export default function Board() {
             </div>
 
 
+
             <div
                 className="relative w-full h-[80vh] rounded-xl p-4 overflow-auto
                         bg-cover bg-center bg-no-repeat"
-                style={{
-                    backgroundImage: "url('/bulletin.jpg')",
-                }}
+                style={
+                    activeBoard.background.type === "image"
+                        ? { backgroundImage: `url(${activeBoard.background.value})` }
+                        : { backgroundColor: activeBoard.background.value }
+                }
                 onMouseMove={(e) => {
                     if (draggingId === null) return;
 

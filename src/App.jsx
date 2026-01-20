@@ -10,8 +10,6 @@ function App() {
 
 export default App;
 
-// Bord achtergrond aanpassen (kiezen uit fotos?)
-// Bord achtegrond verschillende fotos kiezen
 // Bord achtergrond eigen foto kiezen
 
 // GalleryCard mooier maken
