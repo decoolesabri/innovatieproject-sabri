@@ -18,16 +18,21 @@ export default function GalleryCard({ onDelete }) {
     }
 
     return (
-        <BaseCard title="Gallery" onDelete={onDelete}>
+        <BaseCard title="Gallery" onDelete={onDelete} resizable>
             <div
                 onClick={handleCardClick} 
-                className="w-full h-40 border-2 border-dashed rounded flex items-center justify-center cursor-pointer hover:bg-gray-50"
+                className="
+                    w-full h-full
+                    border-2 border-dashed rounded
+                    flex items-center justify-center
+                    cursor-pointer hover:bg-gray-50
+                "
             >
-                {image ? ( // ternary operator om te checken op image er is of niet
+                {image ? (
                     <img
                         src={image}
                         alt="Geselecteerd"
-                        className="max-h-full max-w-full object-contain"
+                        className="w-full h-full object-contain pointer-events-none"
                     />
                 ) : (
                     <p className="text-gray-400 text-sm">
