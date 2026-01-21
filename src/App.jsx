@@ -10,8 +10,6 @@ function App() {
 
 export default App;
 
-// Bord achtergrond eigen foto kiezen
-
 // GalleryCard mooier maken
 // TodoCard belang geven + voortgangsbalk
 

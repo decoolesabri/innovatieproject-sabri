@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CardPicker from "./CardPicker";
 
 import NoteCard from "./Card/NoteCard";
@@ -20,6 +20,8 @@ export default function Board() {
             value: "#E6ECE8",
         },
     };
+
+    const backgroundInputRef = useRef(null);
 
     const [boards, setBoards] = useState(() => {
         const saved = localStorage.getItem("boards");
@@ -224,6 +226,21 @@ export default function Board() {
         }));
     }
 
+    function handleBackgroundImageChange(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            setBoardBackground({
+                type: "image",
+                value: reader.result, // base64 → blijft in localStorage
+            });
+        };
+
+        reader.readAsDataURL(file);
+    }
 
     return (
         <>
@@ -306,6 +323,13 @@ export default function Board() {
 
             <div className="flex justify-end gap-2 mb-2">
                 <button
+                    onClick={() => backgroundInputRef.current.click()}
+                    className="px-3 py-1 text-sm bg-gray-200 rounded"
+                >
+                    Upload
+                </button>
+
+                <button
                     onClick={() =>
                         setBoardBackground({
                             type: "color",
@@ -314,7 +338,7 @@ export default function Board() {
                     }
                     className="px-3 py-1 text-sm bg-gray-200 rounded"
                 >
-                    Kleur
+                    Simpel
                 </button>
 
                 <button
@@ -326,7 +350,7 @@ export default function Board() {
                     }
                     className="px-3 py-1 text-sm bg-gray-200 rounded"
                 >
-                    Afbeelding
+                    Prikbord
                 </button>
 
                 <button
@@ -335,9 +359,16 @@ export default function Board() {
                 >
                     Reset bord
                 </button>
+
+                <input
+                    type="file"
+                    accept="image/*"
+                    ref={backgroundInputRef}
+                    onChange={handleBackgroundImageChange}
+                    hidden
+                />
+
             </div>
-
-
 
             <div
                 className="relative w-full h-[80vh] rounded-xl p-4 overflow-auto
