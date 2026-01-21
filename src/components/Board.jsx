@@ -71,6 +71,15 @@ export default function Board() {
     const [editingName, setEditingName] = useState("");
 
     useEffect(() => {
+        const stopDragging = () => setDraggingId(null);
+        window.addEventListener("mouseup", stopDragging);
+
+        return () => {
+            window.removeEventListener("mouseup", stopDragging);
+        };
+    }, []);
+
+    useEffect(() => {
         localStorage.setItem("boards", JSON.stringify(boards));
     }, [boards]);
 
@@ -393,7 +402,6 @@ export default function Board() {
                         )
                     );
                 }}
-                onMouseUp={() => setDraggingId(null)}
             >
                 <div className="relative w-full min-h-500">
                     {cards.map((card) => (
@@ -414,7 +422,9 @@ export default function Board() {
                                 });
 
                                 updateCards((prevCards) => {
-                                    const maxZ = Math.max(...prevCards.map((c) => c.z));
+                                    const maxZ = prevCards.length
+                                        ? Math.max(...prevCards.map((c) => c.z))
+                                        : 0;
                                     return prevCards.map((c) =>
                                         c.id === card.id
                                             ? { ...c, z: maxZ + 1 }

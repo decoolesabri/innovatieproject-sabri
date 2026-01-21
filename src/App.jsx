@@ -10,7 +10,6 @@ function App() {
 
 export default App;
 
-// GalleryCard mooier maken
 // TodoCard belang geven + voortgangsbalk
 
 // Kaarten kunnen pinnen/locken
