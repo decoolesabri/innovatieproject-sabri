@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BaseCard from "./BaseCard";
 
-export default function ToDoCard({ onDelete }) {
-    const [tasks, setTasks] = useState([]);
+export default function ToDoCard({ id, onDelete }) {
+    const storageKey = `todo-${id}`;
+
+    const [tasks, setTasks] = useState(() => {
+        const saved = localStorage.getItem(storageKey);
+        return saved ? JSON.parse(saved) : [];
+    });
+
     const [input, setInput] = useState("");
 
     function addTask() {
@@ -27,6 +33,10 @@ export default function ToDoCard({ onDelete }) {
             )
         );
     }
+
+    useEffect(() => { // useEffect is voor side effect (dingen die buiten react gebeuren)
+        localStorage.setItem(storageKey, JSON.stringify(tasks));
+    }, [tasks, storageKey]); // Run als één van deze 2 verandert
 
     return (
         <BaseCard title="To-Do" onDelete={onDelete}>

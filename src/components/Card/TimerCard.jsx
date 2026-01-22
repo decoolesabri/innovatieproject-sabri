@@ -2,12 +2,30 @@ import { useEffect, useState } from "react";
 import BaseCard from "./BaseCard";
 
 export default function TimerCard({ onDelete }) {
-    const [title, setTitle] = useState("");
-    const [minutes, setMinutes] = useState(5);
+    const storageKey = "timer-card";
 
-    const [seconds, setSeconds] = useState(0);
+    const [title, setTitle] = useState(() => {
+        const saved = localStorage.getItem(storageKey);
+        return saved ? JSON.parse(saved).title : "";
+    });
+
+    const [minutes, setMinutes] = useState(() => {
+        const saved = localStorage.getItem(storageKey);
+        return saved ? JSON.parse(saved).minutes : 5;
+    });
+
+    const [seconds, setSeconds] = useState(() => {
+        const saved = localStorage.getItem(storageKey);
+        return saved ? JSON.parse(saved).seconds : 0;
+    });
+
+    const [isFinished, setIsFinished] = useState(() => {
+        const saved = localStorage.getItem(storageKey);
+        return saved ? JSON.parse(saved).isFinished : false;
+    });
+
     const [isRunning, setIsRunning] = useState(false);
-    const [isFinished, setIsFinished] = useState(false);
+
 
     function increaseMinutes() {
         if (!isRunning) {
@@ -56,6 +74,17 @@ export default function TimerCard({ onDelete }) {
 
         return () => clearInterval(interval); // Opruimen
     }, [isRunning, minutes]); // Wanneer effect opnieuw mag draaien
+
+    useEffect(() => {
+        const data = {
+            title,
+            minutes,
+            seconds,
+            isFinished,
+        };
+
+        localStorage.setItem(storageKey, JSON.stringify(data));
+    }, [title, minutes, seconds, isFinished]);
 
     return (
         <BaseCard title="Timer" onDelete={onDelete}>

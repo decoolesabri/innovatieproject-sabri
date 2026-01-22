@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BaseCard from "./BaseCard";
 import weatherData from "../../data/weatherMock.json";
 
@@ -13,7 +13,17 @@ const weatherStyles = { // Deze staat buiten de component omdat het vast staat
 };
 
 export default function WeatherCard({ onDelete }) {
-    const [weather, setWeather] = useState(weatherData[0]);
+    const storageKey = "weather-card";
+    
+    const [weather, setWeather] = useState(() => {
+        const saved = localStorage.getItem(storageKey);
+        return saved ? JSON.parse(saved) : weatherData[0];
+    });
+
+    useEffect(() => {
+        localStorage.setItem(storageKey, JSON.stringify(weather));
+    }, [weather]);
+
 
     return (
         <BaseCard title="Weer" onDelete={onDelete}>

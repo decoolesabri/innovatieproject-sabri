@@ -1,9 +1,14 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import BaseCard from "./BaseCard";
 
-export default function GalleryCard({ onDelete }) {
-    const [image, setImage] = useState(null);
-    const fileInputRef = useRef(null); // vaste referentie naar een DOM-element
+export default function GalleryCard({ id, onDelete }) {
+    const storageKey = `gallery-${id}`;
+
+    const [image, setImage] = useState(() => {
+        return localStorage.getItem(storageKey);
+    });
+
+    const fileInputRef = useRef(null); // Vaste referentie naar een DOM-element
 
     function handleCardClick() {
         fileInputRef.current.click();
@@ -13,9 +18,21 @@ export default function GalleryCard({ onDelete }) {
         const file = e.target.files[0];
         if (!file) return;
 
-        const imageUrl = URL.createObjectURL(file);
-        setImage(imageUrl);
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            setImage(reader.result); // Base64 string
+        };
+
+        reader.readAsDataURL(file);
     }
+
+    // Opslaan bij wijziging
+    useEffect(() => {
+        if (image) {
+            localStorage.setItem(storageKey, image);
+        }
+    }, [image, storageKey]);
 
     return (
         <BaseCard title="Gallery" onDelete={onDelete} resizable>
