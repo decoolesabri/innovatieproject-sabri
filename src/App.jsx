@@ -10,8 +10,6 @@ function App() {
 
 export default App;
 
-// TodoCard belang geven + voortgangsbalk
-
 // Kaarten kunnen pinnen/locken
 
 // Darkmode maken
