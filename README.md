@@ -1,16 +1,89 @@
-# React + Vite
+# 🧠 Interactive Digital Bulletin Board
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based **interactive bulletin board** where users can create, move and manage different types of cards such as notes, to-do lists, galleries, timers, calculators and more.
+This project was built as an **innovation project** with a focus on usability, modularity and experimentation.
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This application allows users to create one or multiple boards and freely place cards on them, similar to a digital pinboard.
+Each card type has its own functionality and state, and boards are persisted using **localStorage**, so content is not lost on refresh.
 
-## React Compiler
+The project is built using:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- Vite
+- Tailwind CSS
 
-## Expanding the ESLint configuration
+Key features:
+- Multiple boards
+- Draggable cards
+- Different card types (Notes, To-Do, Gallery, Timer, Calculator, Weather, etc.)
+- Board backgrounds (color or image)
+- Persistent state using localStorage
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Installation
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/decoolesabri/innovatieproject-sabri.git
+   ```
+2. Navigate into the project folder:
+   ```bash
+   cd innovatieproject-sabri
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+5. Open the application in your browser:
+   ```bash
+   http://localhost:5173
+   ```
+
+## Usage
+- Use the Card Picker to add new cards to the board
+- Drag cards freely across the board
+- Each card has its own functionality:
+- NoteCard – simple text notes
+- ToDoCard – tasks with completion and priority
+- GalleryCard – upload and display images
+- TimerCard – countdown timer
+- CalculatorCard – basic calculator
+- WeatherCard – weather information
+- Boards and cards are automatically saved in localStorage
+- Change the board background using the background controls
+Refreshing the page will not remove your data.
+
+## Project structure
+
+```
+src/
+├── components/
+│   ├── Board.jsx
+│   ├── CardPicker.jsx
+│   └── Card/
+│       ├── BaseCard.jsx
+│       ├── NoteCard.jsx
+│       ├── ToDoCard.jsx
+│       ├── GalleryCard.jsx
+│       └── ...
+├── App.jsx
+├── main.jsx
+└── index.css
+```
+
+## Roadmap
+
+Based on experimentation and feedback during development, the following improvements are planned or considered for the future:
+- Dark mode – Full theme support using Tailwind CSS
+- Card locking / pinning – Prevent accidental movement of important cards
+- Resizing cards – Make selected cards resizable
+- Improved mobile support – Better usability on smaller screens
+- Export / import boards – Save boards as JSON files
+- User accounts – Sync boards across devices
+
+These features are not required for the current innovation project, but would make the application more complete and scalable.
+The most important improvements are listed at the top.
