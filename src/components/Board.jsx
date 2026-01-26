@@ -1,0 +1,443 @@
+import { useState, useEffect, useRef } from "react";
+import CardPicker from "./CardPicker";
+
+import NoteCard from "./Card/NoteCard";
+import ToDoCard from "./Card/TodoCard";
+import QuoteCard from "./Card/QuoteCard";
+import GalleryCard from "./Card/GalleryCard";
+import TimerCard from "./Card/TimerCard"
+import CalculatorCard from "./Card/CalculatorCard";
+import WeatherCard from "./Card/WeatherCard";
+
+export default function Board() {
+    const DEFAULT_BOARD_ID = "default";
+    const DEFAULT_BOARD = {
+        id: DEFAULT_BOARD_ID,
+        name: "Mijn bord",
+        cards: [],
+        background: {
+            type: "color",
+            value: "#E6ECE8",
+        },
+    };
+
+    const backgroundInputRef = useRef(null);
+
+    const [boards, setBoards] = useState(() => {
+        const saved = localStorage.getItem("boards");
+
+        if (saved) {
+            const parsed = JSON.parse(saved);
+
+            // forceer dat Mijn bord altijd bestaat
+            if (!parsed[DEFAULT_BOARD_ID]) {
+                return {
+                    [DEFAULT_BOARD_ID]: DEFAULT_BOARD,
+                    ...parsed,
+                };
+            }
+
+            const fixedBoards = {};
+
+            for (const [id, board] of Object.entries(parsed)) {
+                fixedBoards[id] = {
+                    ...board,
+                    background: board.background ?? {
+                        type: "color",
+                        value: "#E6ECE8",
+                    },
+                };
+            }
+
+            return fixedBoards;
+
+        }
+
+        return {
+            [DEFAULT_BOARD_ID]: DEFAULT_BOARD,
+        };
+    });
+
+    const [draggingId, setDraggingId] = useState(null);
+    const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+    const [activeBoardId, setActiveBoardId] = useState(() => {
+        return localStorage.getItem("activeBoardId") || DEFAULT_BOARD_ID;
+    });
+
+    const activeBoard = boards[activeBoardId];
+
+    const [editingBoardId, setEditingBoardId] = useState(null);
+    const [editingName, setEditingName] = useState("");
+
+    useEffect(() => {
+        const stopDragging = () => setDraggingId(null);
+        window.addEventListener("mouseup", stopDragging);
+
+        return () => {
+            window.removeEventListener("mouseup", stopDragging);
+        };
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem("boards", JSON.stringify(boards));
+    }, [boards]);
+
+    useEffect(() => {
+        localStorage.setItem("activeBoardId", activeBoardId);
+    }, [activeBoardId]);
+
+    // Als het actieve bord even niet bestaat, stop render
+    if (!activeBoard) {
+        return <div className="p-4">Bord laden...</div>;
+    }
+
+    const cards = activeBoard.cards;
+
+    function updateCards(updater) {
+        setBoards((prev) => ({
+            ...prev,
+            [activeBoardId]: {
+                ...prev[activeBoardId],
+                cards: updater(prev[activeBoardId].cards),
+            },
+        }));
+    }
+
+    function addCard(type) {
+        updateCards((prevCards) => [
+            ...prevCards,
+            {
+                id: Date.now(),
+                type,
+                x: 40 + prevCards.length * 20,
+                y: 40 + prevCards.length * 20,
+                z: prevCards.length + 1,
+            },
+        ]);
+    }
+
+    function removeCard(id) {
+        updateCards((prevCards) =>
+            prevCards.filter((card) => card.id !== id)
+        );
+    }
+
+    function renderCard(card) {
+        switch (card.type) {
+            case "note":
+                return (
+                    <NoteCard
+                        id={card.id}
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            case "todo":
+                return (
+                    <ToDoCard
+                        id={card.id}
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            case "quote":
+                return (
+                    <QuoteCard
+                        id={card.id}
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            case "gallery":
+                return (
+                    <GalleryCard
+                        id={card.id}
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            case "timer":
+                return (
+                    <TimerCard
+                        id={card.id}
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            case "calculator":
+                return (
+                    <CalculatorCard
+                        id={card.id}
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            case "weather":
+                return (
+                    <WeatherCard
+                        id={card.id}
+                        onDelete={() => removeCard(card.id)}
+                    />
+                );
+
+            default:
+                return null;
+        }
+    }
+
+    function resetBoard() {
+        updateCards(() => []);
+    }
+
+    function deleteBoard(boardId) {
+        setBoards((prevBoards) => {
+            const entries = Object.entries(prevBoards);
+
+            // Minstens 1 bord houden
+            if (entries.length <= 1) {
+                return prevBoards;
+            }
+
+            const newBoards = { ...prevBoards };
+            delete newBoards[boardId];
+
+            // Als je het actieve bord verwijdert, witch naar een andere
+            if (boardId === activeBoardId) {
+                const remainingIds = Object.keys(newBoards);
+                setActiveBoardId(remainingIds[0]);
+            }
+
+            return newBoards;
+        });
+    }
+
+    function saveBoardName(boardId) {
+        setBoards((prev) => ({
+            ...prev,
+            [boardId]: {
+                ...prev[boardId],
+                name: editingName.trim() || prev[boardId].name,
+            },
+        }));
+
+        setEditingBoardId(null);
+        setEditingName("");
+    }
+
+    function setBoardBackground(background) {
+        setBoards((prev) => ({
+            ...prev,
+            [activeBoardId]: {
+                ...prev[activeBoardId],
+                background,
+            },
+        }));
+    }
+
+    function handleBackgroundImageChange(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            setBoardBackground({
+                type: "image",
+                value: reader.result, // base64 → blijft in localStorage
+            });
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    return (
+        <>
+            <div className="flex gap-2 mb-3 items-center flex-wrap">
+                {Object.values(boards).map((board) => (
+                    <div key={board.id} className="flex items-center gap-1">
+                        {editingBoardId === board.id ? (
+                            <input
+                                autoFocus
+                                value={editingName}
+                                onChange={(e) => setEditingName(e.target.value)}
+                                onBlur={() => saveBoardName(board.id)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") saveBoardName(board.id);
+                                    if (e.key === "Escape") setEditingBoardId(null);
+                                }}
+                                className="px-2 py-1 border rounded text-sm w-32"
+                            />
+                        ) : (
+                            <button
+                                onClick={() => setActiveBoardId(board.id)}
+                                onDoubleClick={() => {
+                                    if (board.id === DEFAULT_BOARD_ID) return;
+
+                                    setEditingBoardId(board.id);
+                                    setEditingName(board.name);
+                                }}
+                                className={`px-3 py-1 rounded ${
+                                    board.id === activeBoardId
+                                        ? "bg-blue-500 text-white"
+                                        : "bg-gray-200"
+                                }`}
+                                title={
+                                    board.id === DEFAULT_BOARD_ID
+                                        ? "Dit bord kan niet hernoemd worden"
+                                        : "Dubbelklik om naam te wijzigen"
+                                }
+                            >
+                                {board.name}
+                            </button>
+                        )}
+
+                        {board.id !== DEFAULT_BOARD_ID && (
+                            <button
+                                onClick={() => deleteBoard(board.id)}
+                                className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
+                                title="Verwijder bord"
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </div>
+                ))}
+
+                <button
+                    onClick={() => {
+                        const id = crypto.randomUUID();
+                        setBoards((prev) => ({
+                            ...prev,
+                            [id]: {
+                                id,
+                                name: `Bord ${Object.keys(prev).length + 1}`,
+                                cards: [],
+                                background: {
+                                    type: "color",
+                                    value: "#E6ECE8",
+                                },
+                            },
+                        }));
+                        setActiveBoardId(id);
+                    }}
+                    className="px-3 py-1 bg-green-500 text-white rounded"
+                >
+                    + Bord
+                </button>
+            </div>
+
+
+            <CardPicker addCard={addCard}/>
+
+            <div className="flex justify-end gap-2 mb-2">
+                <button
+                    onClick={() => backgroundInputRef.current.click()}
+                    className="px-3 py-1 text-sm bg-gray-200 rounded"
+                >
+                    Upload
+                </button>
+
+                <button
+                    onClick={() =>
+                        setBoardBackground({
+                            type: "color",
+                            value: "#E6ECE8",
+                        })
+                    }
+                    className="px-3 py-1 text-sm bg-gray-200 rounded"
+                >
+                    Simpel
+                </button>
+
+                <button
+                    onClick={() =>
+                        setBoardBackground({
+                            type: "image",
+                            value: "/bulletin.jpg",
+                        })
+                    }
+                    className="px-3 py-1 text-sm bg-gray-200 rounded"
+                >
+                    Prikbord
+                </button>
+
+                <button
+                    onClick={resetBoard}
+                    className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                    Reset bord
+                </button>
+
+                <input
+                    type="file"
+                    accept="image/*"
+                    ref={backgroundInputRef}
+                    onChange={handleBackgroundImageChange}
+                    hidden
+                />
+
+            </div>
+
+            <div
+                className="relative w-full h-[80vh] rounded-xl p-4 overflow-auto
+                        bg-cover bg-center bg-no-repeat"
+                style={
+                    activeBoard.background.type === "image"
+                        ? { backgroundImage: `url(${activeBoard.background.value})` }
+                        : { backgroundColor: activeBoard.background.value }
+                }
+                onMouseMove={(e) => {
+                    if (draggingId === null) return;
+
+                    updateCards((prevCards) =>
+                        prevCards.map((card) =>
+                            card.id === draggingId
+                                ? {
+                                    ...card,
+                                    x: e.clientX - offset.x,
+                                    y: e.clientY - offset.y,
+                                }
+                                : card
+                        )
+                    );
+                }}
+            >
+                <div className="relative w-full min-h-500">
+                    {cards.map((card) => (
+                        <div 
+                            key={card.id}
+                            className="absolute cursor-move"
+                            style={{
+                                left: card.x,
+                                top: card.y,
+                                zIndex: card.z,
+                            }}
+                            onMouseDown={(e) => {
+                                setDraggingId(card.id);
+
+                                setOffset({
+                                    x: e.clientX - card.x,
+                                    y: e.clientY - card.y,
+                                });
+
+                                updateCards((prevCards) => {
+                                    const maxZ = prevCards.length
+                                        ? Math.max(...prevCards.map((c) => c.z))
+                                        : 0;
+                                    return prevCards.map((c) =>
+                                        c.id === card.id
+                                            ? { ...c, z: maxZ + 1 }
+                                            : c
+                                    );
+                                });
+                            }}
+                        >
+                            {renderCard(card)}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+    );
+}
