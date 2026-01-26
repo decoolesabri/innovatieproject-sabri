@@ -9,7 +9,3 @@ function App() {
 }
 
 export default App;
-
-// Kaarten kunnen pinnen/locken
-
-// Darkmode maken
